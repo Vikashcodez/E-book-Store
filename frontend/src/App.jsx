@@ -1,11 +1,7 @@
-import { Button, HStack } from "@chakra-ui/react"
-
-const App = () => {
+export default function App() {
   return (
-    <HStack>
-      <Button>Click me</Button>
-      <Button>Click me</Button>
-    </HStack>
+    <h1 className="text-3xl text-green-500 font-bold underline">
+      Hello world!
+    </h1>
   )
 }
-export default App
