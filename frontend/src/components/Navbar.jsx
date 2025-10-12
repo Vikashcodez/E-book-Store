@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Menu, X, Search } from 'lucide-react';
+import { Link } from 'react-router-dom'; // Add this import
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,11 +17,11 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: 'Home', id: 'home' },
-    { name: 'Books', id: 'books' },
-    { name: 'Blogs', id: 'blogs' },
-    { name: 'About', id: 'about' },
-    { name: 'Contact', id: 'contact' }
+    { name: 'Home', id: 'home', path: '/' },
+    { name: 'Books', id: 'books', path: '/books' },
+    { name: 'Blogs', id: 'blogs', path: '/blogs' },
+    { name: 'About', id: 'about', path: '/about' },
+    { name: 'Contact', id: 'contact', path: '/contact' }
   ];
 
   return (
@@ -47,9 +48,9 @@ export default function Navbar() {
             {/* Desktop Nav */}
             <div className="hidden lg:flex items-center gap-8">
               {navLinks.map((link) => (
-                <a
+                <Link
                   key={link.id}
-                  href={`#${link.id}`}
+                  to={link.path}
                   onClick={() => setActiveLink(link.id)}
                   className={`text-sm font-medium transition-colors relative py-1 ${
                     activeLink === link.id 
@@ -61,7 +62,7 @@ export default function Navbar() {
                   {activeLink === link.id && (
                     <div className="absolute -bottom-1 left-0 right-0 h-0.5 bg-lavender-600"></div>
                   )}
-                </a>
+                </Link>
               ))}
             </div>
 
@@ -82,9 +83,11 @@ export default function Navbar() {
 
               <div className="w-px h-6 bg-gray-200 mx-2"></div>
 
-              <button className="px-5 py-2 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
-                Login
-              </button>
+              <Link to="/login">
+                <button className="px-5 py-2 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
+                  Login
+                </button>
+              </Link>
             </div>
 
             {/* Mobile menu button */}
@@ -107,9 +110,9 @@ export default function Navbar() {
             <div className="px-6 py-4">
               <div className="flex flex-col gap-1 mb-4">
                 {navLinks.map((link) => (
-                  <a
+                  <Link
                     key={link.id}
-                    href={`#${link.id}`}
+                    to={link.path}
                     onClick={() => {
                       setActiveLink(link.id);
                       setIsMenuOpen(false);
@@ -121,7 +124,7 @@ export default function Navbar() {
                     }`}
                   >
                     {link.name}
-                  </a>
+                  </Link>
                 ))}
               </div>
 
@@ -130,9 +133,11 @@ export default function Navbar() {
                   <ShoppingCart className="w-4 h-4" />
                   Cart ({cartCount})
                 </button>
-                <button className="flex-1 px-4 py-3 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
-                  Login
-                </button>
+                <Link to="/login" className="flex-1">
+                  <button className="w-full px-4 py-3 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
+                    Login
+                  </button>
+                </Link>
               </div>
             </div>
           </div>

@@ -31,10 +31,10 @@ const placeNow = (el, slot, skew) =>
   });
 
 const CardSwap = ({
-  width = 500,
-  height = 400,
-  cardDistance = 60,
-  verticalDistance = 70,
+  width = 420,
+  height = 320,
+  cardDistance = 45,
+  verticalDistance = 55,
   delay = 5000,
   pauseOnHover = false,
   onCardClick,
@@ -178,7 +178,7 @@ const CardSwap = ({
   return (
     <div
       ref={container}
-      className="absolute bottom-0 right-0 transform translate-x-[5%] translate-y-[20%] origin-bottom-right perspective-[900px] overflow-visible max-[768px]:translate-x-[25%] max-[768px]:translate-y-[25%] max-[768px]:scale-[0.75] max-[480px]:translate-x-[25%] max-[480px]:translate-y-[25%] max-[480px]:scale-[0.55]"
+      className="absolute bottom-0 right-0 transform translate-x-[5%] translate-y-[5%] origin-bottom-right perspective-[900px] overflow-visible max-[768px]:translate-x-[25%] max-[768px]:translate-y-[10%] max-[768px]:scale-[0.75] max-[480px]:translate-x-[25%] max-[480px]:translate-y-[10%] max-[480px]:scale-[0.55]"
       style={{ width, height }}
     >
       {rendered}
@@ -196,11 +196,10 @@ function HeroSection() {
       <div className="absolute bottom-20 left-1/2 w-72 h-72 bg-lavender-300 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-blob animation-delay-4000"></div>
 
       {/* Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-20 pb-20">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-12 pb-16">
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
           {/* Left content */}
-          <div className="space-y-8">
-
+          <div className="space-y-6">
             <h1 className="text-5xl lg:text-6xl font-bold text-gray-900 leading-tight">
               Discover Your Next
               <span className="block text-lavender-600 mt-2">Great Read</span>
@@ -220,7 +219,7 @@ function HeroSection() {
               </button>
             </div>
 
-            <div className="flex items-center gap-8 pt-8">
+            <div className="flex items-center gap-8 pt-6">
               <div className="text-center">
                 <div className="text-3xl font-bold text-lavender-600">10K+</div>
                 <div className="text-sm text-gray-600 mt-1">Books Available</div>
@@ -239,27 +238,27 @@ function HeroSection() {
           </div>
 
           {/* Right side - Card Stack */}
-          <div className="relative h-[600px] lg:h-[700px]">
+          <div className="relative h-[500px] lg:h-[550px]">
             <CardSwap
               width={400}
-              height={500}
-              cardDistance={50}
-              verticalDistance={60}
+              height={320}
+              cardDistance={42}
+              verticalDistance={52}
               delay={4000}
               pauseOnHover={true}
               skewAmount={5}
               easing="elastic"
             >
-              <Card className="bg-gradient-to-br from-lavender-400 to-purple-500 p-8 flex flex-col justify-between">
+              <Card className="bg-gradient-to-br from-lavender-400 to-purple-500 p-7 flex flex-col justify-between">
                 <div>
                   <div className="text-white/80 text-sm font-medium mb-2">Featured Book</div>
-                  <h3 className="text-3xl font-bold text-white mb-4">The Art of Reading</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">The Art of Reading</h3>
                   <p className="text-white/90 text-sm leading-relaxed">
                     Discover the transformative power of books and how they shape our understanding of the world.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     SA
                   </div>
                   <div>
@@ -269,16 +268,16 @@ function HeroSection() {
                 </div>
               </Card>
 
-              <Card className="bg-gradient-to-br from-purple-400 to-lavender-500 p-8 flex flex-col justify-between">
+              <Card className="bg-gradient-to-br from-purple-400 to-lavender-500 p-7 flex flex-col justify-between">
                 <div>
                   <div className="text-white/80 text-sm font-medium mb-2">Popular Choice</div>
-                  <h3 className="text-3xl font-bold text-white mb-4">Digital Wisdom</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">Digital Wisdom</h3>
                   <p className="text-white/90 text-sm leading-relaxed">
                     Navigate the modern world with insights from technology, philosophy, and innovation.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-semibold">
+                  <div className="w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center text-white font-semibold text-sm">
                     4.8
                   </div>
                   <div>
@@ -288,16 +287,16 @@ function HeroSection() {
                 </div>
               </Card>
 
-              <Card className="bg-gradient-to-br from-lavender-500 to-purple-600 p-8 flex flex-col justify-between">
+              <Card className="bg-gradient-to-br from-lavender-500 to-purple-600 p-7 flex flex-col justify-between">
                 <div>
                   <div className="text-white/80 text-sm font-medium mb-2">New Release</div>
-                  <h3 className="text-3xl font-bold text-white mb-4">Modern Stories</h3>
+                  <h3 className="text-2xl font-bold text-white mb-3">Modern Stories</h3>
                   <p className="text-white/90 text-sm leading-relaxed">
                     Contemporary narratives that capture the essence of our interconnected world.
                   </p>
                 </div>
                 <div className="flex items-center gap-3">
-                  <div className="px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full">
+                  <div className="px-3 py-1 bg-white/20 backdrop-blur-sm rounded-full">
                     <span className="text-white font-medium text-sm">Just Added</span>
                   </div>
                 </div>
