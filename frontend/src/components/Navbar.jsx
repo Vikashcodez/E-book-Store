@@ -1,20 +1,42 @@
 import React, { useState, useEffect } from 'react';
-import { ShoppingCart, Menu, X, Search } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Add this import
+import { ShoppingCart, Menu, X, Search, User, LogOut } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const [cartCount] = useState(3);
   const [scrolled, setScrolled] = useState(false);
   const [activeLink, setActiveLink] = useState('home');
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 10);
     };
     window.addEventListener('scroll', handleScroll);
+
+    // Check if user is logged in
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setUser(JSON.parse(userData));
+    }
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const handleLogout = () => {
+    // Clear user data from localStorage
+    localStorage.removeItem('user');
+    localStorage.removeItem('isLoggedIn');
+    setUser(null);
+    setIsUserMenuOpen(false);
+    
+    // Redirect to home page
+    navigate('/');
+    window.location.reload(); // Refresh to update the UI
+  };
 
   const navLinks = [
     { name: 'Home', id: 'home', path: '/' },
@@ -83,11 +105,57 @@ export default function Navbar() {
 
               <div className="w-px h-6 bg-gray-200 mx-2"></div>
 
-              <Link to="/login">
-                <button className="px-5 py-2 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
-                  Login
-                </button>
-              </Link>
+              {user ? (
+                // User is logged in - Show avatar and dropdown
+                <div className="relative">
+                  <button
+                    onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                    className="flex items-center gap-2 p-2 hover:bg-gray-50 rounded-lg transition-colors"
+                  >
+                    <div className="w-8 h-8 bg-lavender-600 rounded-full flex items-center justify-center text-white text-sm font-semibold">
+                      {user.full_name ? user.full_name.charAt(0).toUpperCase() : 'U'}
+                    </div>
+                  </button>
+
+                  {/* User Dropdown Menu */}
+                  {isUserMenuOpen && (
+                    <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-1 z-50">
+                      <div className="px-4 py-2 border-b border-gray-100">
+                        <p className="text-sm font-medium text-gray-900">{user.full_name}</p>
+                        <p className="text-xs text-gray-500 truncate">{user.email}</p>
+                      </div>
+                      <Link
+                        to="/profile"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Profile
+                      </Link>
+                      <Link
+                        to="/orders"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        onClick={() => setIsUserMenuOpen(false)}
+                      >
+                        My Orders
+                      </Link>
+                      <button
+                        onClick={handleLogout}
+                        className="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50 transition-colors flex items-center gap-2"
+                      >
+                        <LogOut className="w-4 h-4" />
+                        Sign Out
+                      </button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                // User is not logged in - Show login button
+                <Link to="/login">
+                  <button className="px-5 py-2 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
+                    Login
+                  </button>
+                </Link>
+              )}
             </div>
 
             {/* Mobile menu button */}
@@ -133,18 +201,40 @@ export default function Navbar() {
                   <ShoppingCart className="w-4 h-4" />
                   Cart ({cartCount})
                 </button>
-                <Link to="/login" className="flex-1">
-                  <button className="w-full px-4 py-3 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
-                    Login
-                  </button>
-                </Link>
+                
+                {user ? (
+                  <div className="flex-1 flex flex-col gap-2">
+                    <div className="text-center text-sm text-gray-600">
+                      Welcome, {user.full_name}
+                    </div>
+                    <button 
+                      onClick={handleLogout}
+                      className="w-full px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-lg hover:bg-red-700 transition-colors flex items-center justify-center gap-2"
+                    >
+                      <LogOut className="w-4 h-4" />
+                      Sign Out
+                    </button>
+                  </div>
+                ) : (
+                  <Link to="/login" className="flex-1">
+                    <button className="w-full px-4 py-3 bg-lavender-600 text-white text-sm font-medium rounded-lg hover:bg-lavender-700 transition-colors">
+                      Login
+                    </button>
+                  </Link>
+                )}
               </div>
             </div>
           </div>
         )}
       </nav>
 
-    
+      {/* Close dropdown when clicking outside */}
+      {isUserMenuOpen && (
+        <div 
+          className="fixed inset-0 z-40" 
+          onClick={() => setIsUserMenuOpen(false)}
+        />
+      )}
 
       <style jsx>{`
         .bg-lavender-50 { background-color: #f5f3ff; }

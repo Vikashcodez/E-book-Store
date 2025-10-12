@@ -12,23 +12,61 @@ const SignupPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
     });
+    setError(''); // Clear error when user types
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
+    
+    // Basic validation
+    if (formData.password !== formData.confirmPassword) {
+      setError("Passwords don't match");
+      return;
+    }
+    
+    if (formData.password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
     setIsLoading(true);
     
-    // Simulate signup process
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost/digital-library/api/signup', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          full_name: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          confirm_password: formData.confirmPassword
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        alert('Account created successfully!');
+        window.location.href = '/login';
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error('Error during signup:', error);
+      setError('Network error. Please check if server is running.');
+    } finally {
       setIsLoading(false);
-      // Handle signup logic here
-    }, 1500);
+    }
   };
 
   const handleGoogleSignup = () => {
@@ -60,6 +98,13 @@ const SignupPage = () => {
 
         {/* Signup Form */}
         <div className="bg-white rounded-2xl shadow-lg border border-lavender-100 p-8">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm text-center">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Full Name Field */}
             <div>
@@ -122,7 +167,8 @@ const SignupPage = () => {
                   value={formData.password}
                   onChange={handleChange}
                   className="block w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-lavender-500 focus:border-lavender-500 transition-colors duration-300"
-                  placeholder="Create a password"
+                  placeholder="Create a password (min 6 characters)"
+                  minLength="6"
                 />
                 <button
                   type="button"

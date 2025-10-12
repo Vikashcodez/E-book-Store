@@ -1,23 +1,52 @@
 // LoginPage.jsx
 import React, { useState } from 'react';
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from 'lucide-react';
-import { Link } from 'react-router-dom'; // Add this import
+import { Link, useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError('');
     setIsLoading(true);
     
-    // Simulate login process
-    setTimeout(() => {
+    try {
+      const response = await fetch('http://localhost/digital-library/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password
+        }),
+      });
+
+      const data = await response.json();
+      
+      if (data.success) {
+        // Store user data in localStorage
+        localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('isLoggedIn', 'true');
+        
+        // Redirect to home page
+        navigate('/');
+        window.location.reload(); // Refresh to update navbar
+      } else {
+        setError(data.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      setError('Network error. Please check if server is running.');
+    } finally {
       setIsLoading(false);
-      // Handle login logic here
-    }, 1500);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -28,13 +57,13 @@ const LoginPage = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-lavender-50 via-white to-purple-50 flex items-center justify-center p-4">
       {/* Back to Home Button */}
-      <a 
-        href="/"
+      <Link 
+        to="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-lavender-600 hover:text-lavender-700 transition-colors duration-300 group"
       >
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
         <span className="font-medium text-sm">Back to Home</span>
-      </a>
+      </Link>
 
       {/* Login Card */}
       <div className="w-full max-w-md">
@@ -49,6 +78,13 @@ const LoginPage = () => {
 
         {/* Login Form */}
         <div className="bg-white rounded-2xl shadow-lg border border-lavender-100 p-8">
+          {/* Error Message */}
+          {error && (
+            <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+              <p className="text-red-600 text-sm text-center">{error}</p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* Email Field */}
             <div>
