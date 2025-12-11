@@ -35,8 +35,12 @@ const LoginPage = () => {
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('isLoggedIn', 'true');
         
-        // Redirect to home page
-        navigate('/');
+        // Check if user is admin and redirect accordingly
+        if (data.user.role === 'admin') {
+          navigate('/admin/dashboard');
+        } else {
+          navigate('/');
+        }
         window.location.reload(); // Refresh to update navbar
       } else {
         setError(data.message);
@@ -54,6 +58,12 @@ const LoginPage = () => {
     console.log('Google login clicked');
   };
 
+  // Pre-fill admin credentials for testing (remove in production)
+  const fillAdminCredentials = () => {
+    setEmail('admin@gmail.com');
+    setPassword('Admin@123');
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-lavender-50 via-white to-purple-50 flex items-center justify-center p-4">
       {/* Back to Home Button */}
@@ -64,6 +74,14 @@ const LoginPage = () => {
         <ArrowLeft className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" />
         <span className="font-medium text-sm">Back to Home</span>
       </Link>
+
+      {/* Admin Test Button (Remove in production) */}
+      <button
+        onClick={fillAdminCredentials}
+        className="absolute top-6 right-6 bg-lavender-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-lavender-600 transition-colors"
+      >
+        Fill Admin Credentials
+      </button>
 
       {/* Login Card */}
       <div className="w-full max-w-md">

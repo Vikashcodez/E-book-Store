@@ -9,6 +9,7 @@ import Footer from './components/Footer';
 import Home from './Pages/Home';
 import LoginPage from './Pages/Login';
 import SignupPage from './Pages/Signup';
+import AdminDashboard from './Pages/AdminDashboard.';
 
 // Dummy components for other routes (replace with your actual components)
 const Blogs = () => <div className="min-h-screen pt-24 px-6">Blogs Page</div>;
@@ -17,11 +18,14 @@ const Contact = () => <div className="min-h-screen pt-24 px-6">Contact Page</div
 
 const App = () => {
   const location = useLocation();
-  const isLoginOrSignupPage = location.pathname === '/login' || location.pathname === '/signup';
+  const isLoginOrSignupPageOrAdminDashboard =
+    location.pathname === '/login' ||
+    location.pathname === '/signup' ||
+    location.pathname === '/admin/dashboard';
 
   return (
     <>
-      {!isLoginOrSignupPage && <Navbar />}
+      {!isLoginOrSignupPageOrAdminDashboard && <Navbar />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/books" element={<BookStoreSection />} />
@@ -30,8 +34,9 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
+        <Route path="/admin/dashboard" element={<AdminDashboard />} />
       </Routes>
-      {!isLoginOrSignupPage && <Footer />}
+      {!isLoginOrSignupPageOrAdminDashboard && <Footer />}
     </>
   );
 };
